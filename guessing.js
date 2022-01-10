@@ -1,4 +1,4 @@
-import { WORDS } from './words.js'
+import { WORDS, COMMON_WORDS } from './words.js'
 import { score } from './scoring.js'
 
 function anyChar(str, predicate) {
@@ -59,8 +59,20 @@ export function guess(known, eliminated) {
     return null;
   }
 
-  return words
-    .map(word => [word, score(word)])
-    .sort(([_, aScore], [__, bScore]) => bScore - aScore)
-    [0][0];
+  let scored = words.map(word => [word, score(word)]);
+  let highScore = scored
+    .map(([_, score]) => score)
+    .sort((a, b) => b - a)
+    [0];
+
+  let guesses = scored
+    .filter(([_, score]) => score === highScore)
+    .map(([word]) => word);
+
+  let commonGuesses = guesses.filter(word => COMMON_WORDS.has(word));
+  if (commonGuesses.length > 0) {
+    return commonGuesses[0];
+  }
+
+  return guesses[0];
 }
