@@ -21,6 +21,10 @@ function allChar(str, predicate) {
   return true;
 }
 
+function randomItem(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
 /**
  * Accepts currently known and eliminated letters and produces the optimal
  * next guess.
@@ -71,8 +75,8 @@ export function guess(known, eliminated) {
 
   let commonGuesses = guesses.filter(word => COMMON_WORDS.has(word));
   if (commonGuesses.length > 0) {
-    return commonGuesses[0];
+    return randomItem(commonGuesses);
   }
 
-  return guesses[0];
+  return randomItem(guesses);
 }
